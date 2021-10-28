@@ -1,8 +1,8 @@
 <template>
 <div>
-    {{student.name}}
-    {{student.group}}
-    <img v-bind:src="student.photo">
+    <br size="500px">{{student.name}}
+    <br>{{student.group}}
+    <br><img v-bind:src="student.photo">
 </div>
 </template>
 <script>
