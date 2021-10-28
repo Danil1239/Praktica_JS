@@ -63,7 +63,7 @@
                 </tr> 
             </table> 
             <button v-on:click="convert">Convert</button> 
-            <br>{{result}}{{end_value}}{{end_ccy}}
+            <br>{{result}}{{end_value | Round}}{{end_ccy}}
 
    </div>
 </template>
@@ -107,12 +107,19 @@
       axios.get("http://46.101.212.195:3000/students").then((response) => {
            console.log(response.data)
            this.students = response.data;
+           
+         
         })
 		axios.get("https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5").then((response) => {
            console.log(response.data)
            this.currency = response.data;
         })
      },
+    //  computed: {
+    //     getCount () { 
+    //         return this.$store.getters.getCount
+    //     }
+    // },
      methods: {
       
 	  addStudent: function(){
@@ -125,6 +132,7 @@
 		  .then((response) => {
            console.log(response.data)
            this.students.push(response.data)
+             
 		   })
 	  },
 	   deleteStudent: function(id){
@@ -132,6 +140,7 @@
 		  })
 		 .then((response) => {
             this.students =  this.students.filter(elem => elem._id!=id)
+              
          })
            
 	  },
@@ -153,7 +162,12 @@
 		  this.group1 = group;
 		  this.isDonePr1 = isDonePr;
 	  },
-      
+      filters: {
+          Round: function(value){
+          return value.toFixed(2);
+
+      }
+      },
 	  convert:function(){ 
             if(this.start_ccy_e==true) this.start_ccy = "EUR" 
             else if (this.start_ccy_u==true) this.start_ccy = "USD" 

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <br size="500px">{{student.name}}
+    <br>{{student.name}}
     <br>{{student.group}}
     <br><img v-bind:src="student.photo">
 </div>
@@ -24,5 +24,11 @@ axios.get("http://46.101.212.195:3000/students/"+this.id).then((response) => {
            this.student = response.data;
         })
 },
+// computed: {
+//   studentsCount () {
+//     return this.$store.getters.getCount
+//   }
+// }
+
 }
 </script>
