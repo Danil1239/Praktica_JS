@@ -1,5 +1,11 @@
 <template>
    <div>
+        <link rel="stylesheet" id="webcolor" v-bind:href="chooseWebcolor == 'color2' ? './color2.css' : './color1.css'">
+        <div align='left'>
+            <input type="radio"  value="color1" name="color" v-on:click="takeWebcolor('color1')">Светлая
+                   <input type="radio"  value="color2" name="color" v-on:click="takeWebcolor('color2')">Темная
+        </div>
+        <p></p>
 		<table border="1" cellpadding="5" cellspacing="3">
 			<tr>
 				<th>Photo</th>
@@ -20,6 +26,8 @@
 			</tr>
 		</table>
             <br>Введіть потрібне прізвище<input v-model="search">
+            <p></p>
+            <br><h5> Количество студентов: {{studentsCount}} </h5>
 			<br><h3>Add Student</h3>
 			<br>Input Name: <input v-model="name">
 			<br>Input Group: <input v-model="group">
@@ -107,7 +115,7 @@
       axios.get("http://46.101.212.195:3000/students").then((response) => {
            console.log(response.data)
            this.students = response.data;
-           
+             this.$store.commit('setCount', this.students.length);
          
         })
 		axios.get("https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5").then((response) => {
@@ -115,13 +123,24 @@
            this.currency = response.data;
         })
      },
-    //  computed: {
-    //     getCount () { 
-    //         return this.$store.getters.getCount
-    //     }
-    // },
+     computed: {
+        studentsCount () {
+            return this.$store.getters.getCount
+        },
+         chooseWebcolor () {
+    return this.$store.getters.getWebcolor
+  }
+        },
+     filters: {
+          Round: function(value){
+          return value.toFixed(2);
+
+      }
+      },
      methods: {
-      
+       takeWebcolor: function(webcolor) {
+            this.$store.commit('setWebcolor', webcolor)
+        },
 	  addStudent: function(){
 		  Vue.axios.post("http://46.101.212.195:3000/students", {
               photo: "https://robohash.org/"+this.name,
@@ -132,7 +151,7 @@
 		  .then((response) => {
            console.log(response.data)
            this.students.push(response.data)
-             
+            this.$store.commit('setCount', this.students.length);  
 		   })
 	  },
 	   deleteStudent: function(id){
@@ -140,7 +159,7 @@
 		  })
 		 .then((response) => {
             this.students =  this.students.filter(elem => elem._id!=id)
-              
+             this.$store.commit('setCount', this.students.length);  
          })
            
 	  },
@@ -162,12 +181,7 @@
 		  this.group1 = group;
 		  this.isDonePr1 = isDonePr;
 	  },
-      filters: {
-          Round: function(value){
-          return value.toFixed(2);
-
-      }
-      },
+     
 	  convert:function(){ 
             if(this.start_ccy_e==true) this.start_ccy = "EUR" 
             else if (this.start_ccy_u==true) this.start_ccy = "USD" 
