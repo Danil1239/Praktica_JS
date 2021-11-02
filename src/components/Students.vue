@@ -16,7 +16,7 @@
 			</tr>
 			<tr v-for="stud in students" v-bind:key="stud._id">
 				<td><img v-bind:src="stud.photo" width="50px"></td>
-                <td><router-link v-bind:to="'/student-info/'+stud._id">{{stud.name}}</router-link></td>
+                <td><router-link v-bind:to="'/student-info/'+stud._id"></router-link></td>
 				<td v-bind:style="stud.name.indexOf(search)>-1 && search.length >0 ? 'background-color:#CA2C2C' : 'background-color:#fff'">{{stud.name}}</td>
 				<td>{{stud.group}}</td>
 				<td>{{stud.mark}}</td>
@@ -129,7 +129,10 @@
         },
          chooseWebcolor () {
     return this.$store.getters.getWebcolor
-  }
+        },
+         getCurrentUser() {
+            return this.$store.getters.getUser
+        }
         },
      filters: {
           Round: function(value){
